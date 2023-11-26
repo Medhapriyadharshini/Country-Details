@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countries</title>
+    <link rel="icon" type="image/png" href="https://th.bing.com/th/id/OIP.N81zgK6cB9f-rLFxxlBGqAHaFV?w=221&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7">
+
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row g-3 mt-5 mb-3">
+            <div class="col-4"></div>
+            <div class="col col-xl-4 mx-auto text-center shadow rounded-2 bg-secondary-subtle mt-2 p-5">
+                <h3 class="mb-4">Search for a Country Details</h3>
+                <input id="CountryName" type="text" class="form-control mb-3" id="inputPassword2"
+                    placeholder="Enter a Country Name">
+
+                <button type="button" onclick="searchCountry()" class="btn btn-primary mb-3 px-5">Search</button>
+            </div>
+            <div class="col-4"></div>
+        </div>
+
+        <div id="result" class="row row-cols-md-1 row-cols-xl-2 row-cols-lg-2 shadow rounded-2 mt-3">
+
+        </div>
+
+    </div>
+</body>
+
+
+<script>
+
+    function searchCountry() {
+        let country = document.getElementById("CountryName").value
+        console.log(country);
+        if (country == "") {
+            alert("Please enter a Country Name")
+        }
+        else {
+            fetch(`https://restcountries.com/v3.1/name/${country}?fullText=true`)
+                .then(data => data.json())
+                .then(data => displayCountry(data))
+                .catch(err => alert(`Invalid Country Name`))
+
+            function displayCountry(data) {
+                for (country of data)
+                    htmlData = ` 
+                    <div class="card container border-dark my-5">
+                        <h4 class="text-center mt-4" style="text-shadow:4px 8px 4px grey;"> <b style="text-transform:uppercase;">${country.name.common}</b> <span style="font-size:17px;">( Capital : ${country.capital} ) </span></h4><br>   
+                 <div class="d-flex justify-content-center mt-4">
+                    <div class="card border-success mb-3 mx-3" style="max-width: 18rem;">
+                        <div class="card-body text-success">
+                            <h5 class="card-title mt-3 text-center mb-3">National Flag</h5><hr>
+                            <img class="img-fluid " style="max-width:250px" src="${country.flags.svg}" alt="">
+                            <p class="text-dark fs-6 fw-medium p-2 mt-2">${country.flags.alt}</p>  
+    
+                        </div>
+                    </div>
+
+                    <div class="card border-success mb-3 mx-3" style="max-width: 18rem;">
+                        <div class="card-body text-success">
+                            <h5 class="card-title mt-3 text-center">National Emblem</h5><hr>
+                            <img class="img-fluid mt-5"  style="max-width:250px; max-height:400px; object-fit:cover; " src="${country.coatOfArms.svg}" alt="">
+                        </div>
+                    </div>
+                 </div>
+                </div>
+`
+
+                result.innerHTML = htmlData;
+            }
+        }
+    }
+
+
+</script>
+
+</html>
